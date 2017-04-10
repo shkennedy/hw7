@@ -15,14 +15,17 @@ mysql = MySQL(application)
 def hw7():
     args = request.get_json()
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * WHERE state = ' + args['state'] + 
+    cur.execute('SELECT AVG(comm_rate) AS comm_rate_avg, ' +
+                'AVG(ind_rate) AS ind_rate_avg, ' +
+                'AVG(res_rate) AS res_rate_avg ' +
+                'FROM hw7 WHERE state = ' + args['state'] +
                 ' AND service_type = ' + args['service_type'])
     rv = cur.ferchall()
 
     return jsonify({'status': 'OK',
-                    'comm_rate_avg': '',
-                    'ind_rate_avg': '',
-                    'res_rate_avg': ''})
+                    'comm_rate_avg': rv.comm_rate_avg,
+                    'ind_rate_avg': rv.ind_rate_avg,
+                    'res_rate_avg': rv.res_rate_avg})
 
 
 if __name__ == '__main__':
